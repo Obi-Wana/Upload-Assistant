@@ -7,6 +7,7 @@ from src.trackers.HUNO import HUNO
 from src.trackers.BLU import BLU
 from src.trackers.BHD import BHD
 from src.trackers.AITHER import AITHER
+from src.trackers.AITHERTEST import AITHERTEST
 from src.trackers.STC import STC
 from src.trackers.R4E import R4E
 from src.trackers.THR import THR
@@ -190,11 +191,23 @@ async def do_the_thing(base_dir):
         if meta.get('image_list', False) in (False, []) and meta.get('skip_imghost_upload', False) == False:
             return_dict = {}
             meta['image_list'], dummy_var = prep.upload_screens(meta, meta['screens'], 1, 0, meta['screens'],[], return_dict)
+
             if meta['debug']:
+                console.print("default images")
                 console.print(meta['image_list'])
             # meta['uploaded_screens'] = True
         elif meta.get('skip_imghost_upload', False) == True and meta.get('image_list', False) == False:
             meta['image_list'] = []
+        
+        # Upload comparison screenshots if it is an internal uplaod
+        if int(meta.get('internal', False)):
+            return_dict = {}
+            
+            console.print("[bold green]Uploading Comp Source Screens...")
+            meta['comp_image_list_source'], dummy_var = prep.load_comparison_screenshots_source(meta, return_dict)
+            
+            console.print("[bold green]Uploading Comp Encode Screens...")
+            meta['comp_image_list_encode'], dummy_var = prep.load_comparison_screenshots_encode(meta, return_dict)
 
         if not os.path.exists(os.path.abspath(f"{meta['base_dir']}/tmp/{meta['uuid']}/BASE.torrent")):
             reuse_torrent = None
@@ -246,10 +259,10 @@ async def do_the_thing(base_dir):
         #######  Upload to Trackers  #######
         ####################################
         common = COMMON(config=config)
-        api_trackers = ['BLU', 'AITHER', 'STC', 'R4E', 'STT', 'RF', 'ACM','LCD','LST','HUNO', 'SN', 'LT', 'NBL', 'ANT', 'JPTV', 'TDC', 'OE', 'BHDTV', 'RTF']
+        api_trackers = ['BLU', 'ATHT', 'ATH', 'ATHT', 'STC', 'R4E', 'STT', 'RF', 'ACM','LCD','LST','HUNO', 'SN', 'LT', 'NBL', 'ANT', 'JPTV', 'TDC', 'OE', 'BHDTV', 'RTF']
         http_trackers = ['HDB', 'TTG', 'FL', 'PTER', 'HDT', 'MTV']
         tracker_class_map = {
-            'BLU' : BLU, 'BHD': BHD, 'AITHER' : AITHER, 'STC' : STC, 'R4E' : R4E, 'THR' : THR, 'STT' : STT, 'HP' : HP, 'PTP' : PTP, 'RF' : RF, 'SN' : SN, 
+                'BLU' : BLU, 'BHD': BHD, 'ATHT': AITHERTEST, 'ATH': AITHER, 'STC' : STC, 'R4E' : R4E, 'THR' : THR, 'STT' : STT, 'HP' : HP, 'PTP' : PTP, 'RF' : RF, 'SN' : SN, 
             'ACM' : ACM, 'HDB' : HDB, 'LCD': LCD, 'TTG' : TTG, 'LST' : LST, 'HUNO': HUNO, 'FL' : FL, 'LT' : LT, 'NBL' : NBL, 'ANT' : ANT, 'PTER': PTER, 'JPTV' : JPTV,
             'TL' : TL, 'TDC' : TDC, 'HDT' : HDT, 'MTV': MTV, 'OE': OE, 'BHDTV': BHDTV, 'RTF':RTF}
 
@@ -443,8 +456,18 @@ def get_confirmation(meta):
     if int(meta.get('mal_id', 0)) != 0:
         cli_ui.info(f"MAL : https://myanimelist.net/anime/{meta['mal_id']}")
     console.print()
+    if int(meta.get('featured', '0')) != 0:
+        cli_ui.info(f"Featured: {meta['featured']}")
     if int(meta.get('freeleech', '0')) != 0:
         cli_ui.info(f"Freeleech: {meta['freeleech']}")
+    if int(meta.get('internal', '0')) != 0:
+        cli_ui.info(f"Internal: {meta['internal']}")
+    if int(meta.get('exclusive', '0')) != 0:
+        cli_ui.info(f"Exclusive: {meta['exclusive']}")
+    if meta.get('sourcename', None) != None:
+        cli_ui.info(f"Sourcename: {meta['sourcename']}")
+    if meta.get('releaser', None) != None:
+        cli_ui.info(f"Releaser: {meta['releaser']}")
     if meta['tag'] == "":
             tag = ""
     else:

@@ -641,6 +641,62 @@ class Prep():
 
 
     """
+    Get comparison Screenshots from folder
+    """
+    def load_comparison_screenshots_source(self, meta, return_dict):
+        title = (f"{meta['title']}.{meta['year']}")
+        title = title.replace(" ",".").replace("'","")
+        comparison_images_folder = "/mnt/media/35_screens"
+        comparison_source_images = []
+        comparison_folders = [
+            f"{title}-4000",
+            f"{title}-5000",
+            f"{title}-6000",
+            f"{title}-7000",
+            f"{title}-8000"
+        ]
+        comparison_destination = f"{meta['base_dir']}/tmp/{meta['uuid']}"
+
+        for folder in comparison_folders:
+            os.chdir(f"{comparison_images_folder}/{folder}")
+            
+            current_image = glob.glob("*source.*")
+            comparison_source_images.extend(current_image)
+
+            shutil.copy(f"{comparison_images_folder}/{folder}/{current_image[0]}", comparison_destination)
+
+        os.chdir(f"{meta['base_dir']}/tmp/{meta['uuid']}")
+
+        return self.upload_screens(meta, 6, 1, 1, 6, comparison_source_images, return_dict)
+
+    def load_comparison_screenshots_encode(self, meta, return_dict):
+        title = (f"{meta['title']}.{meta['year']}")
+        title = title.replace(" ",".").replace("'","")
+        comparison_images_folder = "/mnt/media/35_screens"
+        comparison_encode_images = []
+        comparison_folders = [
+            f"{title}-4000",
+            f"{title}-5000",
+            f"{title}-6000",
+            f"{title}-7000",
+            f"{title}-8000"
+        ]
+        comparison_destination = f"{meta['base_dir']}/tmp/{meta['uuid']}"
+
+        for folder in comparison_folders:
+            os.chdir(f"{comparison_images_folder}/{folder}")
+            
+            current_image = glob.glob("*ATELiER.*")
+            comparison_encode_images.extend(current_image)
+
+            shutil.copy(f"{comparison_images_folder}/{folder}/{current_image[0]}", comparison_destination)
+
+        os.chdir(f"{meta['base_dir']}/tmp/{meta['uuid']}")
+
+        return self.upload_screens(meta, 6, 1, 1, 6, comparison_encode_images, return_dict)
+
+
+    """
     Generate Screenshots
     """
 
@@ -2826,6 +2882,20 @@ class Prep():
                     generic.write(f"{each['web_url']}\n")
                 generic.write(f"\nThumbnail Image:\n")
                 for each in meta['image_list']:
+                    generic.write(f"{each['img_url']}\n")
+            if len(meta['comp_image_list_source']) > 0:
+                generic.write(f"\nImage Webpage:\n")
+                for each in meta['comp_image_list_source']:
+                    generic.write(f"{each['web_url']}\n")
+                generic.write(f"\nThumbnail Image:\n")
+                for each in meta['comp_image_list_source']:
+                    generic.write(f"{each['img_url']}\n")
+            if len(meta['comp_image_list_encode']) > 0:
+                generic.write(f"\nImage Webpage:\n")
+                for each in meta['comp_image_list_encode']:
+                    generic.write(f"{each['web_url']}\n")
+                generic.write(f"\nThumbnail Image:\n")
+                for each in meta['comp_image_list_encode']:
                     generic.write(f"{each['img_url']}\n")
         title = re.sub("[^0-9a-zA-Z\[\]]+", "", meta['title'])
         archive = f"{meta['base_dir']}/tmp/{meta['uuid']}/{title}"

@@ -82,6 +82,12 @@ class Args():
         parser.add_argument('-cleanup', '--cleanup', action='store_true', required=False, help="Clean up tmp directory")
 
         parser.add_argument('-fl', '--freeleech', nargs='*', required=False, help="Freeleech Percentage", default=0, dest="freeleech")
+        parser.add_argument('-featured', '--featured', action='store_true', required=False, help="Feature release")
+        parser.add_argument('-sticky', '--sticky', action='store_true', required=False, help="Stick to top")
+        parser.add_argument('-i', '--internal', action='store_true', required=False, help="Internal release")
+        parser.add_argument('-exclusive', '--exclusive', nargs='*', required=False, help="Exclusive Days for Internal Releases", default=2, dest="exclusive")
+        parser.add_argument('-sourcename', '--sourcename', nargs='*', required=False, help="Name of source release", type=str)
+        parser.add_argument('-releaser', '--releaser', nargs='*', required=False, help="Releaser username", type=str)
         args, before_args = parser.parse_known_args(input)
         args = vars(args)
         # console.print(args)
@@ -107,6 +113,7 @@ class Args():
                     elif key == 'tag':
                         meta[key] = f"-{value2}"
                     elif key == 'screens':
+                        print(key)
                         meta[key] = int(value2)
                     elif key == 'season':
                         meta['manual_season'] = value2
@@ -149,6 +156,12 @@ class Args():
                                 console.print('[red]Continuing without -hdb')
                         else:
                             meta['hdb'] = value2
+                    elif key == "exclusive":
+                        meta[key] = value2
+                    elif key == "sourcename":
+                        meta[key] = value2
+                    elif key == "releaser":
+                        meta[key] = value2
 
                     else:
                         meta[key] = value2
@@ -157,6 +170,7 @@ class Args():
             elif key in ("manual_edition"):
                 meta[key] = value
             elif key in ("freeleech"):
+                print("true1")
                 meta[key] = 100
             elif key in ("tag") and value == []:
                 meta[key] = ""

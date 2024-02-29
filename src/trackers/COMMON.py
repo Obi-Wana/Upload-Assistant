@@ -39,6 +39,29 @@ class COMMON():
             if desc_header != "":
                 descfile.write(desc_header)
             
+            if True:
+                descfile.write(f"""
+[code]
+       _______ ______ _      _ ______ _____
+    /\|__   __|  ____| |    (_)  ____|  __ \\
+   /  \  | |  | |__  | |     _| |__  | |__) |
+  / /\ \ | |  |  __| | |    | |  __| |  _  /
+ / ____ \| |  | |____| |____| | |____| | \ \\
+/_/    \_\_|  |______|______|_|______|_|  \_\\
+
+\n
+
+Release.....: {meta['uuid']}
+Source......: {meta['sourcename']}
+Video.......: {meta['mediainfo']['media']['track'][1]['Height']}p
+Audio.......: {meta['mediainfo']['media']['track'][0]['Audio_Language_List']}
+Subtitle....: {meta['mediainfo']['media']['track'][0]['Text_Language_List']}
+Encoder.....: {meta['releaser']}
+
+[/code]
+                """)
+                descfile.write("\n")
+
             bbcode = BBCODE()
             if meta.get('discs', []) != []:
                 discs = meta['discs']
@@ -67,13 +90,36 @@ class COMMON():
             desc = desc.replace('[img]', '[img=300]')
             descfile.write(desc)
             images = meta['image_list']
+            images_source = meta['comp_image_list_source']
+            images_encode = meta['comp_image_list_encode']
             if len(images) > 0: 
+                descfile.write("[b][size=18]Screenshots[/size][/b]")
                 descfile.write("[center]")
                 for each in range(len(images[:int(meta['screens'])])):
                     web_url = images[each]['web_url']
                     raw_url = images[each]['raw_url']
                     descfile.write(f"[url={web_url}][img=350]{raw_url}[/img][/url]")
                 descfile.write("[/center]")
+            
+            if len(images_source) > 0 and len(images_encode) > 0:
+                descfile.write("\n\n")
+                descfile.write("[b][size=18]Comparison[/size][/b]")
+                descfile.write("\n")
+                descfile.write("Source:")
+                descfile.write("\n")
+                for each in range(1, len(images_source)):
+                    web_url = images_source[each]['web_url']
+                    raw_url = images_source[each]['raw_url']
+                    descfile.write(f"[url={web_url}][img=250]{raw_url}[/img][/url]")
+                descfile.write("\n")
+                
+                descfile.write("Encode:")
+                descfile.write("\n")
+                for each in range(1, len(images_encode)):
+                    web_url = images_encode[each]['web_url']
+                    raw_url = images_encode[each]['raw_url']
+                    descfile.write(f"[url={web_url}][img=250]{raw_url}[/img][/url]")
+                descfile.write("\n")
 
             if signature != None:
                 descfile.write(signature)
