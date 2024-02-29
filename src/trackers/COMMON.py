@@ -4,6 +4,7 @@ import traceback
 import requests
 import re
 import json
+import math
 
 from src.bbcode import BBCODE
 from src.console import console
@@ -93,33 +94,47 @@ Encoder.....: {meta['releaser']}
             images_source = meta['comp_image_list_source']
             images_encode = meta['comp_image_list_encode']
             if len(images) > 0: 
-                descfile.write("[b][size=18]Screenshots[/size][/b]")
+                line_return = math.ceil(len(images) / 2)
                 descfile.write("[center]")
+                descfile.write("[b][size=20]Screenshots[/size][/b]")
+                descfile.write("\n\n")
                 for each in range(len(images[:int(meta['screens'])])):
                     web_url = images[each]['web_url']
                     raw_url = images[each]['raw_url']
+                    if each == line_return:
+                        descfile.write("\n")
                     descfile.write(f"[url={web_url}][img=350]{raw_url}[/img][/url]")
                 descfile.write("[/center]")
+                descfile.write("\n\n\n")
             
+            descfile.write("\n")
+
             if len(images_source) > 0 and len(images_encode) > 0:
+                descfile.write("[center]")
+                descfile.write("[b][size=20]Comparison[/size][/b]")
                 descfile.write("\n\n")
-                descfile.write("[b][size=18]Comparison[/size][/b]")
-                descfile.write("\n")
-                descfile.write("Source:")
-                descfile.write("\n")
-                for each in range(1, len(images_source)):
-                    web_url = images_source[each]['web_url']
-                    raw_url = images_source[each]['raw_url']
-                    descfile.write(f"[url={web_url}][img=250]{raw_url}[/img][/url]")
+                descfile.write("[comparison=Source,Encode]")
                 descfile.write("\n")
                 
-                descfile.write("Encode:")
+                for each in range(1, len(images_source)):
+                    raw_url_s = images_source[each]['raw_url']
+                    raw_url_e = images_encode[each]['raw_url']
+                    descfile.write(f"{raw_url_s}, {raw_url_e}")
+                    descfile.write("\n")
+
                 descfile.write("\n")
-                for each in range(1, len(images_encode)):
-                    web_url = images_encode[each]['web_url']
-                    raw_url = images_encode[each]['raw_url']
-                    descfile.write(f"[url={web_url}][img=250]{raw_url}[/img][/url]")
-                descfile.write("\n")
+                descfile.write("[/comparison]")
+                descfile.write("[/center]")
+                descfile.write("\n\n\n")
+            
+            descfile.write("\n")
+            
+            if int(meta.get('internal', False)):
+                descfile.write("[center]")
+                descfile.write("[b][size=20]Notes[/size][/b]")
+                descfile.write("\n\n")
+                descfile.write("Enjoy.")
+                descfile.write("\n\n\n")
 
             if signature != None:
                 descfile.write(signature)

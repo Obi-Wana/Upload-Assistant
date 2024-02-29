@@ -25,7 +25,7 @@ class AITHERTEST():
         self.source_flag = 'AitherTest'
         self.search_url = 'https://aither.dev/api/torrents/filter'
         self.upload_url = 'https://aither.dev/api/torrents/upload'
-        self.signature = f"\n[center][url=https://aither.dev/forums/topics/1349]Created by L4G's Upload Assistant[/url][/center]"
+        self.signature = f"\n[center]Created by [url=https://aither.dev/forums/topics/1349]L4G's Upload Assistant[/url], customized by ATH[/center]"
         self.banned_groups = ['4K4U', 'AROMA', 'EMBER', 'FGT', 'Hi10', 'ION10', 'Judas', 'LAMA', 'MeGusta', 'QxR', 'RARBG', 'SPDVD', 'STUTTERSHIT', 'SWTYBLZ', 'Sicario', 'TAoE', 'TGx', 'TSP', 'TSPxL', 'Tigole', 'Weasley[HONE]', 'Will1869', 'YIFY', 'd3g', 'nikt0', 'x0r']
         pass
     
