@@ -91,8 +91,12 @@ Encoder.....: {meta['releaser']}
             desc = desc.replace('[img]', '[img=300]')
             descfile.write(desc)
             images = meta['image_list']
-            images_source = meta['comp_image_list_source']
-            images_encode = meta['comp_image_list_encode']
+            if int(meta.get('nocomparison', False)) == False:
+                images_source = meta['comp_image_list_source']
+                images_encode = meta['comp_image_list_encode']
+            else:
+                images_source = ''
+                images_encode = ''
             if len(images) > 0: 
                 line_return = math.ceil(len(images) / 2)
                 descfile.write("[center]")

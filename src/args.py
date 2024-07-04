@@ -85,6 +85,7 @@ class Args():
         parser.add_argument('-featured', '--featured', action='store_true', required=False, help="Feature release")
         parser.add_argument('-sticky', '--sticky', action='store_true', required=False, help="Stick to top")
         parser.add_argument('-i', '--internal', action='store_true', required=False, help="Internal release")
+        parser.add_argument('-nocomparison', '--nocomparison', action='store_true', required=False, help="Do not add comparison screenshots to the description")
         parser.add_argument('-exclusive', '--exclusive', nargs='*', required=False, help="Exclusive Days for Internal Releases", default=2, dest="exclusive")
         parser.add_argument('-sourcename', '--sourcename', nargs='*', required=False, help="Name of source release", type=str)
         parser.add_argument('-releaser', '--releaser', nargs='*', required=False, help="Releaser username", type=str)

@@ -201,7 +201,7 @@ async def do_the_thing(base_dir):
         
         # Upload comparison screenshots if it is an internal uplaod
         if meta.get('comp_image_list_source', False) in (False, []) and meta.get('skip_imghost_upload', False) == False:
-            if int(meta.get('internal', False)):
+            if int(meta.get('internal', False)) and int(meta.get('nocomparison', False)) == False:
                 return_dict = {}
                 
                 console.print("[bold green]Uploading Comp Source Screens...")
